@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sqlite3.h>
 
 #include "sqlite.h"
 #include "duda_api.h"

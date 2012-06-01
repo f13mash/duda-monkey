@@ -1,0 +1,15 @@
+CC      = $CC
+CFLAGS  = $CFLAGS
+LDFLAGS = $LDFLAGS
+DEFS    = $DEFS
+OBJECTS = sqlite3.o
+SOURCES = sqlite3.c
+
+all: $(OBJECTS)
+
+.c.o: $(SOURCES)
+	$(CC) $(CFLAGS) $(DEFS) -fPIC -c $<
+
+
+clean:
+	rm -rf *~ *.o
