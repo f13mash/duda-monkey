@@ -24,7 +24,16 @@
 
 #include "duda.h"
 
-#define SESSION_STORE_PATH     "/dev/shm/duda_sessions"
+#ifdef MK_PLATFORM
+    #if MK_PLATFORM == MK_PLATFORM_GENERIC
+            #define SESSION_STORE_PATH     "/dev/shm/duda_sessions"
+    #elif MK_PLATFORM == MK_PLATFORM_ANDROID
+            #define SESSION_STORE_PATH     "/data/monkey/duda_sessions"
+    #endif
+#else
+    #define SESSION_STORE_PATH     "/dev/shm/duda_sessions"
+#endif
+
 #define SESSION_DEFAULT_PERM   0700
 #define SESSION_UUID_SIZE      128  /* 128 bytes */
 #define SESSION_KEY            "DUDA_SESSION"
