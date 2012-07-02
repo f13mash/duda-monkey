@@ -1,4 +1,4 @@
-CC      = gcc -g -Wall -DDEBUG
+CC      = arm-linux-androideabi-gcc -g -Wall -DDEBUG
 INCDIR  = ../src -I../../../src/include/ -I../
 SOURCES = hello.c
 OBJECTS = hello.o

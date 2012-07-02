@@ -1,7 +1,8 @@
-CC      = gcc
-CFLAGS  =  -O2 -Wall
+CC      = arm-linux-androideabi-gcc
+CFLAGS  =  -O2 -Wall -fvisibility=hidden
 LDFLAGS = 
-DEFS    = 
+DEFS    =  -DTRACE -DACCEPT_GENERIC
+DIRS    = sqlite_main
 INCDIR  = ../../../../src/include -I../../src
 OBJECTS = duda_package.o sqlite.o
 SOURCES = duda_package.c sqlite.c
@@ -9,10 +10,12 @@ SOURCES = duda_package.c sqlite.c
 all: ../sqlite.dpkg
 
 ../sqlite.dpkg: $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc -lsqlite3
+	@(for d in $(DIRS); do $(MAKE) -C $$d ; done)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc
 
 .c.o: $(SOURCES)
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<
 
 clean:
 	rm -rf *~ *.o
+	@(for d in $(DIRS); do $(MAKE) -C $$d clean ; done)

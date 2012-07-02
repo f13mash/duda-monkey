@@ -1,7 +1,7 @@
-CC      = gcc
-CFLAGS  =  -O2 -Wall
+CC      = arm-linux-androideabi-gcc
+CFLAGS  =  -O2 -Wall -fvisibility=hidden
 LDFLAGS = 
-DEFS    = 
+DEFS    =  -DTRACE -DACCEPT_GENERIC
 INCDIR  = ../../../../src/include -I../../src
 OBJECTS = duda_package.o base64.o
 SOURCES = duda_package.c base64.c
