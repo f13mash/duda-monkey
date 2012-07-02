@@ -21,7 +21,6 @@
 
 #include <dlfcn.h>
 
-#include "MKPlugin.h"
 #include "duda.h"
 #include "duda_conf.h"
 #include "duda_event.h"
@@ -188,7 +187,7 @@ int _mkp_event_write(int sockfd)
     return duda_event_write_callback(sockfd);
 }
 
-void _mkp_core_prctx(struct server_config *config)
+int _mkp_core_prctx(struct server_config *config)
 {
 }
 
@@ -235,7 +234,7 @@ void _mkp_core_thctx()
     }
 }
 
-int _mkp_init(void **api, char *confdir)
+int _mkp_init(struct plugin_api **api, char *confdir)
 {
     mk_api = *api;
 
