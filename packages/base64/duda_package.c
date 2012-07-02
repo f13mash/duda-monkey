@@ -29,7 +29,7 @@ struct duda_api_base64 *get_base64_api()
     struct duda_api_base64 *base64;
 
     /* Alloc object */
-    base64 = malloc(sizeof(struct duda_api_base64));
+    base64 = monkey->mem_alloc(sizeof(struct duda_api_base64));
 
     /* Map API calls */
     base64->encode = base64_encode;
@@ -38,10 +38,15 @@ struct duda_api_base64 *get_base64_api()
     return base64;
 }
 
-duda_package_t *init_duda_package()
+duda_package_t *duda_package_main(struct duda_api_objects *api)
 {
-    duda_package_t *dpkg = malloc(sizeof(duda_package_t));
+    duda_package_t *dpkg;
 
+    /* Initialize package internals */
+    duda_package_init();
+
+    /* Package object */
+    dpkg = monkey->mem_alloc(sizeof(duda_package_t));
     dpkg->name = "base64";
     dpkg->version = "0.1";
     dpkg->api = get_base64_api();

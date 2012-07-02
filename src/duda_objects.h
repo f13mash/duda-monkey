@@ -19,45 +19,27 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
+/*
+ * Duda objects are struct passed by references to third party components of the framework,
+ * like web services or packages.
+ */
 
-#include "duda_package.h"
-#include "sha1.h"
+#ifndef DUDA_OBJECTS_H
+#define DUDA_OBJECTS_H
 
-static void sha1_encode (const void *dataIn, unsigned char *dataOut,
-                         unsigned long length)
-{
-    SHA_CTX sha;
-    SHA1_Init(&sha);
-    SHA1_Update(&sha, dataIn, length);
-    SHA1_Final(dataOut, &sha);
-}
+/* Objects exported to the web service */
+struct plugin_api *monkey;
+struct duda_api_map *map;
+struct duda_api_msg *msg;
+struct duda_api_request *request;
+struct duda_api_response *response;
+struct duda_api_debug *debug;
+struct duda_api_event *event;
+struct duda_api_console *console;
+struct duda_api_param *param;
+struct duda_api_session *session;
+struct duda_api_cookie *cookie;
+struct duda_api_global *global;
+struct duda_api_xtime *xtime;
 
-struct duda_api_sha1 *get_sha1_api()
-{
-    struct duda_api_sha1 *sha1;
-
-    /* Alloc object */
-    sha1 = malloc(sizeof(struct duda_api_sha1));
-
-    /* Map API calls */
-    sha1->encode = sha1_encode;
-
-    return sha1;
-}
-
-duda_package_t *duda_package_main(struct duda_api_objects *api)
-{
-    duda_package_t *dpkg;
-
-    /* Initialize package internals */
-    duda_package_init();
-
-    /* Package object */
-    dpkg = monkey->mem_alloc(sizeof(duda_package_t));
-    dpkg->name = "sha1";
-    dpkg->version = "0.1";
-    dpkg->api = get_sha1_api();
-
-    return dpkg;
-}
+#endif

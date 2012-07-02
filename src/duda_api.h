@@ -24,10 +24,11 @@
 
 #include "mk_list.h"
 #include "duda.h"
+#include "duda_event.h"
 #include "duda_global.h"
 #include "duda_cookie.h"
-#include "duda_package.h"
 #include "duda_console.h"
+#include "duda_request.h"
 
 /* types of data */
 typedef struct duda_interface duda_interface_t;
@@ -122,11 +123,6 @@ struct duda_param {
 /* MONKEY object: monkey->x() */
 struct plugin_api *monkey;
 
-/* MAP specific Duda calls */
-struct duda_api_main {
-    duda_package_t *(*package_load) (const char *);
-};
-
 /* MAP object: map->x() */
 struct duda_api_map {
     /* interface_ */
@@ -159,6 +155,8 @@ struct duda_api_response {
     int (*body_print)  (duda_request_t *, char *, int);
     int (*body_printf) (duda_request_t *, const char *, ...);
     int (*sendfile)    (duda_request_t *, char *);
+    int (*wait) (duda_request_t *);
+    int (*cont) (duda_request_t *);
     int (*end) (duda_request_t *, void (*end_callback) ());
 };
 
@@ -186,8 +184,10 @@ struct duda_api_objects {
     struct plugin_api *monkey;
     struct duda_api_map *map;
     struct duda_api_msg *msg;
+    struct duda_api_request *request;
     struct duda_api_response *response;
     struct duda_api_debug *debug;
+    struct duda_api_event *event;
     struct duda_api_console *console;
     struct duda_api_global *global;
     struct duda_api_param *param;
@@ -198,11 +198,18 @@ struct duda_api_objects {
 
 struct duda_api_objects *duda_api_master();
 
+/* MAP specific Duda calls */
+struct duda_api_main {
+    struct duda_package *(*package_load) (const char *, struct duda_api_objects *);
+};
+
+
 int http_status(duda_request_t *dr, int status);
 int http_header(duda_request_t *dr, char *row, int len);
 int body_print(duda_request_t *dr, char *raw, int len);
 int body_printf(duda_request_t *dr, const char *format, ...);
 int sendfile_enqueue(duda_request_t *dr, char *path);
 int end_response(duda_request_t *dr, void (*end_cb) (duda_request_t *));
+void duda_api_exception(duda_request_t *dr, const char *message);
 
 #endif

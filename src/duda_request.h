@@ -19,45 +19,29 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
+#ifndef DUDA_REQUEST_H
+#define DUDA_REQUEST_H
 
-#include "duda_package.h"
-#include "sha1.h"
+#include "duda.h"
 
-static void sha1_encode (const void *dataIn, unsigned char *dataOut,
-                         unsigned long length)
-{
-    SHA_CTX sha;
-    SHA1_Init(&sha);
-    SHA1_Update(&sha, dataIn, length);
-    SHA1_Final(dataOut, &sha);
-}
+struct duda_api_request {
+    int (*is_data)    (duda_request_t *);
+    int (*is_get)     (duda_request_t *);
+    int (*is_post)    (duda_request_t *);
+    int (*is_head)    (duda_request_t *);
+    int (*is_put)     (duda_request_t *);
+    int (*is_delete)  (duda_request_t *);
+    int (*is_content_type) (duda_request_t *, const char *);
+};
 
-struct duda_api_sha1 *get_sha1_api()
-{
-    struct duda_api_sha1 *sha1;
+/* functions */
+struct duda_api_request *duda_request_object();
+int duda_request_is_data(duda_request_t *dr);
+int duda_request_is_get(duda_request_t *dr);
+int duda_request_is_post(duda_request_t *dr);
+int duda_request_is_head(duda_request_t *dr);
+int duda_request_is_put(duda_request_t *dr);
+int duda_request_is_delete(duda_request_t *dr);
+int duda_request_is_content_type(duda_request_t *dr, const char *content_type);
 
-    /* Alloc object */
-    sha1 = malloc(sizeof(struct duda_api_sha1));
-
-    /* Map API calls */
-    sha1->encode = sha1_encode;
-
-    return sha1;
-}
-
-duda_package_t *duda_package_main(struct duda_api_objects *api)
-{
-    duda_package_t *dpkg;
-
-    /* Initialize package internals */
-    duda_package_init();
-
-    /* Package object */
-    dpkg = monkey->mem_alloc(sizeof(duda_package_t));
-    dpkg->name = "sha1";
-    dpkg->version = "0.1";
-    dpkg->api = get_sha1_api();
-
-    return dpkg;
-}
+#endif
