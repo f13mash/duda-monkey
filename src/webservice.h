@@ -73,7 +73,7 @@ duda_package_t *pkg_temp;
             /* FIXME: error handler */                                  \
             monkey->_error(MK_ERR,                                      \
                            "Duda: You can only define global vars inside duda_init()"); \
-            exit(EXIT_FAILURE);                                         \
+            /*exit(EXIT_FAILURE);*/                                         \
         }                                                               \
         pthread_key_create(&key_t.key, NULL);                           \
         key_t.callback = cb;                                            \
